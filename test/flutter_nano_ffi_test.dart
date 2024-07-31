@@ -6,7 +6,6 @@ import 'package:flutter_nano_ffi/flutter_nano_ffi.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  //meaningless change to use actions
   group('nanodart tests', () {
     test('test seed to private key', () {
       expect(

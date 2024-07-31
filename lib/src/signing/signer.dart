@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:flutter_nano_ffi/src/ffi/ed25519_blake2b.dart';
 import 'package:flutter_nano_ffi/src/util.dart';
-import 'package:flutter_nano_ffi/src/account/account_type.dart';
 import 'package:flutter_nano_ffi/src/account/account_util.dart';
 import 'package:flutter_nano_ffi/src/blocks/state_block.dart';
 import 'package:flutter_nano_ffi/src/keys/keys.dart';
