@@ -26,20 +26,19 @@ class NanoBlocks {
   }
 
   static String generateMessageBlockHash(int accountType, String account, String message) {
-    final dummy_32 = "0000000000000000000000000000000000000000000000000000000000000000";
+    final String dummy_32 = "0000000000000000000000000000000000000000000000000000000000000000";
+    final Uint8List message_hash = Ed25519Blake2b.computeHashMessage(
+      NanoHelpers.stringToBytesUtf8((accountType == NanoAccountType.BANANO ? "bananomsg-" : "nanomsg-") + message)
+    );
     print("message hash");
-    print(NanoHelpers.byteToHex(Ed25519Blake2b.computeHashMessage(
-          NanoHelpers.stringToBytesUtf8((accountType == NanoAccountType.BANANO ? "bananomsg-" : "nanomsg-") + message)
-        )));
+    print(message_hash);
     return NanoBlocks.computeStateHash(
       accountType,
       account,
       dummy_32,
       NanoAccounts.createAccount(
         accountType,
-        NanoHelpers.byteToHex(Ed25519Blake2b.computeHashMessage(
-          NanoHelpers.stringToBytesUtf8((accountType == NanoAccountType.BANANO ? "bananomsg-" : "nanomsg-") + message)
-        )),
+        NanoHelpers.byteToHex(message_hash),
       ),
       BigInt.from(0),
       dummy_32,
