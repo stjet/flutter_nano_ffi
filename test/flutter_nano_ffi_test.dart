@@ -149,10 +149,6 @@ void main() {
           'AEC75F807DCE45AFA787DE7B395BE498A885525569DD614162E0C80FD4F27EE9';
 
       String signature = NanoSignatures.signBlock(hash, privKey);
-      String signature2 = NanoSignatures.signBlock(hash, privKey);
-
-      print(signature);
-      print(signature2);
 
       expect(
           NanoSignatures.validateSig(
@@ -227,12 +223,9 @@ void main() {
           'Testing123 testing 123 \nmic test mic test';
 
       String signature = NanoSignatures.signMessage(NanoAccountType.BANANO, message, privKey);
-      /*expect(
-          signature,
-          '8166C4032EAEFEA52037F91DD0FA274EA5C56B28742E8A6F403C5F4AF8BA6A3D05C729209E2D0F40A8FF81248E3A4F3737B0400E94BD06D05CA392BD21E42800');*/
-      print(signature);
-      String signature2 = NanoSignatures.signMessage(NanoAccountType.BANANO, message, privKey);
-      print(signature2);
+      expect(
+        signature,
+        '8166C4032EAEFEA52037F91DD0FA274EA5C56B28742E8A6F403C5F4AF8BA6A3D05C729209E2D0F40A8FF81248E3A4F3737B0400E94BD06D05CA392BD21E42800');
 
       expect(
           NanoSignatures.validateMessageSig(

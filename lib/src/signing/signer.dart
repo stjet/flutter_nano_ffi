@@ -22,21 +22,21 @@ class NanoSignatures {
     final message_block_hash = NanoBlocks.generateMessageBlockHash(
       accountType,
       NanoAccounts.createAccount(accountType, NanoKeys.createPublicKey(privKey)),
-    message
+      message,
     );
-    print("message block hash");
-    print(message_block_hash);
     return NanoHelpers.byteToHex(Ed25519Blake2b.signMessage(
         NanoHelpers.hexToBytes(message_block_hash),
         NanoHelpers.hexToBytes(privKey))!);
   }
 
   static bool validateMessageSig(int accountType, String message, Uint8List pubKey, Uint8List signature) {
+    final message_block_hash = NanoBlocks.generateMessageBlockHash(
+      accountType,
+      NanoAccounts.createAccount(accountType, pubKey),
+      message,
+    );
     return validateSig(
-      NanoBlocks.generateMessageBlockHash(
-          accountType,
-          NanoHelpers.byteToHex(pubKey),
-          message),
+      message_block_hash,
       pubKey,
       signature,
     );

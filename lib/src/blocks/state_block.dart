@@ -30,8 +30,6 @@ class NanoBlocks {
     final Uint8List message_hash = Ed25519Blake2b.computeHashMessage(
       NanoHelpers.stringToBytesUtf8((accountType == NanoAccountType.BANANO ? "bananomsg-" : "nanomsg-") + message)
     );
-    print("message hash");
-    print(NanoHelpers.byteToHex(message_hash));
     return NanoBlocks.computeStateHash(
       accountType,
       account,
