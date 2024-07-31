@@ -19,12 +19,13 @@ class NanoSignatures {
   }
 
   static String signMessage(int accountType, String message, String privKey) {
-    print(NanoBlocks.generateMessageHash(
-      accountType,
-      NanoAccounts.createAccount(accountType, NanoKeys.createPublicKey(privKey)),
-      message));
+    print("message block hash");
+    print(NanoBlocks.generateMessageBlockHash(
+          accountType,
+          NanoAccounts.createAccount(accountType, NanoKeys.createPublicKey(privKey)),
+          message));
     return NanoHelpers.byteToHex(Ed25519Blake2b.signMessage(
-        NanoHelpers.hexToBytes(NanoBlocks.generateMessageHash(
+        NanoHelpers.hexToBytes(NanoBlocks.generateMessageBlockHash(
           accountType,
           NanoAccounts.createAccount(accountType, NanoKeys.createPublicKey(privKey)),
           message)),
@@ -32,13 +33,13 @@ class NanoSignatures {
   }
 
   static bool validateMessageSig(int accountType, String message, Uint8List pubKey, Uint8List signature) {
-    return Ed25519Blake2b.verifySignature(
-        NanoHelpers.hexToBytes(NanoBlocks.generateMessageHash(
+    return validateSig(
+      NanoBlocks.generateMessageBlockHash(
           accountType,
-          NanoAccounts.createAccount(accountType, NanoHelpers.byteToHex(pubKey)),
-          message)), 
-        pubKey,
-        signature,
+          NanoHelpers.byteToHex(pubKey),
+          message),
+      pubKey,
+      signature,
     );
   }
 }
