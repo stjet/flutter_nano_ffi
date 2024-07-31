@@ -13,4 +13,14 @@ class NanoSignatures {
     return Ed25519Blake2b.verifySignature(
         NanoHelpers.hexToBytes(hash), pubKey, signature);
   }
+
+  static String signMessage(String message, String privKey) {
+    return NanoHelpers.byteToHex(Ed25519Blake2b.signMessage(
+        NanoHelpers.stringToBytesUtf8(message), NanoHelpers.hexToBytes(privKey))!);
+  }
+
+  static bool validateMessageSig(String message, Uint8List pubKey, Uint8List signature) {
+    return Ed25519Blake2b.verifySignature(
+        NanoHelpers.stringToBytesUtf8(message), pubKey, signature);
+  }
 }

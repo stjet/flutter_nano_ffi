@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_nano_ffi/flutter_nano_ffi.dart';
@@ -214,6 +215,24 @@ void main() {
       // Decrypt seed
       Uint8List decrypted = NanoCrypt.decrypt(encrypted, password);
       expect(NanoHelpers.byteToHex(decrypted), NanoHelpers.byteToHex(seed));
+    });
+    test('test message signature', () {
+      String privKey =
+          '67EDBC8F904091738DF33B4B6917261DB91DD9002D3985A7BA090345264A46C6';
+      String message =
+          'Testing123 testing 123 \nmic test mic test';
+
+      String signature = NanoSignatures.signMessage(message, privKey);
+      expect(
+          signature,
+          '8166C4032EAEFEA52037F91DD0FA274EA5C56B28742E8A6F403C5F4AF8BA6A3D05C729209E2D0F40A8FF81248E3A4F3737B0400E94BD06D05CA392BD21E42800');
+
+      expect(
+          NanoSignatures.validateMessageSig(
+              message,
+              NanoHelpers.hexToBytes(NanoKeys.createPublicKey(privKey)),
+              NanoHelpers.hexToBytes(signature)),
+          true);
     });
   });
 }
