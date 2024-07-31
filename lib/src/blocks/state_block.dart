@@ -31,7 +31,7 @@ class NanoBlocks {
       NanoHelpers.stringToBytesUtf8((accountType == NanoAccountType.BANANO ? "bananomsg-" : "nanomsg-") + message)
     );
     print("message hash");
-    print(message_hash);
+    print(NanoHelpers.byteToHex(message_hash));
     return NanoBlocks.computeStateHash(
       accountType,
       account,
