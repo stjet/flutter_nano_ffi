@@ -19,6 +19,10 @@ class NanoSignatures {
   }
 
   static String signMessage(int accountType, String message, String privKey) {
+    print(NanoBlocks.generateMessageHash(
+      accountType,
+      NanoAccounts.createAccount(accountType, NanoKeys.createPublicKey(privKey)),
+      message));
     return NanoHelpers.byteToHex(Ed25519Blake2b.signMessage(
         NanoHelpers.hexToBytes(NanoBlocks.generateMessageHash(
           accountType,
