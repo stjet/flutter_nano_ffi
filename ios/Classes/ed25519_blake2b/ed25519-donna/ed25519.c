@@ -112,14 +112,14 @@ ED25519_FN(ed25519_sign) (const unsigned char *m, size_t mlen, const unsigned ch
 	ed25519_hash_init(&ctx);
 	ed25519_hash_update(&ctx, extsk + 32, 32);
 	//~ ed25519_randombytes_unsafe(randr, 32);
-	//ed25519_hash_update(&ctx, randr, 32);
+	ed25519_hash_update(&ctx, randr, 32);
 	/*
 	 * Pad the rest of the hash block (which is 128
 	 * bytes in size in our case) with zeros.
 	 * This puts the message (possibly known to a side
 	 * channel attacker) in a separate block.
 	 */
-	//ed25519_hash_update(&ctx, rzero, 64);
+	ed25519_hash_update(&ctx, rzero, 64);
 	ed25519_hash_update(&ctx, m, mlen);
 	ed25519_hash_final(&ctx, hashr);
 	expand256_modm(r, hashr, 64);

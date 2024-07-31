@@ -222,8 +222,6 @@ void main() {
 
       String signature =
           NanoSignatures.signMessage(NanoAccountType.BANANO, message, privKey);
-      expect(signature,
-          '8166C4032EAEFEA52037F91DD0FA274EA5C56B28742E8A6F403C5F4AF8BA6A3D05C729209E2D0F40A8FF81248E3A4F3737B0400E94BD06D05CA392BD21E42800');
 
       expect(
           NanoSignatures.validateMessageSig(
@@ -232,6 +230,14 @@ void main() {
               NanoHelpers.hexToBytes(NanoKeys.createPublicKey(privKey)),
               NanoHelpers.hexToBytes(signature)),
           true);
+
+      expect(
+          NanoSignatures.validateMessageSig(
+              NanoAccountType.BANANO,
+              "incorrect",
+              NanoHelpers.hexToBytes(NanoKeys.createPublicKey(privKey)),
+              NanoHelpers.hexToBytes(signature)),
+          false);
     });
   });
 }
