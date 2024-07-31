@@ -20,16 +20,19 @@ class NanoBlocks {
     Uint8List linkBytes = NanoAccounts.isValid(accountType, link)
         ? NanoHelpers.hexToBytes(NanoAccounts.extractPublicKey(link))
         : NanoHelpers.hexToBytes(link);
-    return NanoHelpers.byteToHex(
-      Ed25519Blake2b.computeHash(accountBytes, previousBytes, representativeBytes, balanceBytes, linkBytes)
-    );
+    return NanoHelpers.byteToHex(Ed25519Blake2b.computeHash(accountBytes,
+        previousBytes, representativeBytes, balanceBytes, linkBytes));
   }
 
-  static String generateMessageBlockHash(int accountType, String account, String message) {
-    final String dummy_32 = "0000000000000000000000000000000000000000000000000000000000000000";
+  static String generateMessageBlockHash(
+      int accountType, String account, String message) {
+    final String dummy_32 =
+        "0000000000000000000000000000000000000000000000000000000000000000";
     final Uint8List message_hash = Ed25519Blake2b.computeHashMessage(
-      NanoHelpers.stringToBytesUtf8((accountType == NanoAccountType.BANANO ? "bananomsg-" : "nanomsg-") + message)
-    );
+        NanoHelpers.stringToBytesUtf8((accountType == NanoAccountType.BANANO
+                ? "bananomsg-"
+                : "nanomsg-") +
+            message));
     return NanoBlocks.computeStateHash(
       accountType,
       account,

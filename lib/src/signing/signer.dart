@@ -21,7 +21,8 @@ class NanoSignatures {
   static String signMessage(int accountType, String message, String privKey) {
     final message_block_hash = NanoBlocks.generateMessageBlockHash(
       accountType,
-      NanoAccounts.createAccount(accountType, NanoKeys.createPublicKey(privKey)),
+      NanoAccounts.createAccount(
+          accountType, NanoKeys.createPublicKey(privKey)),
       message,
     );
     return NanoHelpers.byteToHex(Ed25519Blake2b.signMessage(
@@ -29,10 +30,11 @@ class NanoSignatures {
         NanoHelpers.hexToBytes(privKey))!);
   }
 
-  static bool validateMessageSig(int accountType, String message, Uint8List pubKey, Uint8List signature) {
+  static bool validateMessageSig(
+      int accountType, String message, Uint8List pubKey, Uint8List signature) {
     final message_block_hash = NanoBlocks.generateMessageBlockHash(
       accountType,
-      NanoAccounts.createAccount(accountType, pubKey),
+      NanoAccounts.createAccount(accountType, NanoHelpers.byteToHex(pubKey)),
       message,
     );
     return validateSig(
