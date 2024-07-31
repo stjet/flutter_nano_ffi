@@ -2,6 +2,10 @@ import 'dart:typed_data';
 
 import 'package:flutter_nano_ffi/src/ffi/ed25519_blake2b.dart';
 import 'package:flutter_nano_ffi/src/util.dart';
+import 'package:flutter_nano_ffi/src/account/account_type.dart';
+import 'package:flutter_nano_ffi/src/account/account_util.dart';
+import 'package:flutter_nano_ffi/src/blocks/state_block.dart';
+import 'package:flutter_nano_ffi/src/keys/keys.dart';
 
 class NanoSignatures {
   static String signBlock(String hash, String privKey) {
@@ -14,13 +18,23 @@ class NanoSignatures {
         NanoHelpers.hexToBytes(hash), pubKey, signature);
   }
 
-  static String signMessage(String message, String privKey) {
+  static String signMessage(int accountType, String message, String privKey) {
     return NanoHelpers.byteToHex(Ed25519Blake2b.signMessage(
-        NanoHelpers.stringToBytesUtf8(message), NanoHelpers.hexToBytes(privKey))!);
+        NanoHelpers.hexToBytes(NanoBlocks.generateMessageHash(
+          accountType,
+          NanoAccounts.createAccount(accountType, NanoKeys.createPublicKey(privKey)),
+          message)),
+        NanoHelpers.hexToBytes(privKey))!);
   }
 
-  static bool validateMessageSig(String message, Uint8List pubKey, Uint8List signature) {
+  static bool validateMessageSig(int accountType, String message, Uint8List pubKey, Uint8List signature) {
     return Ed25519Blake2b.verifySignature(
-        NanoHelpers.stringToBytesUtf8(message), pubKey, signature);
+        NanoHelpers.hexToBytes(NanoBlocks.generateMessageHash(
+          accountType,
+          NanoAccounts.createAccount(accountType, NanoHelpers.byteToHex(pubKey)),
+          message)), 
+        pubKey,
+        signature,
+    );
   }
 }

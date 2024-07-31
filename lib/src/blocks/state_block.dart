@@ -1,3 +1,4 @@
+import 'dart:core';
 import 'dart:typed_data';
 
 import 'package:flutter_nano_ffi/src/account/account_type.dart';
@@ -21,6 +22,23 @@ class NanoBlocks {
         : NanoHelpers.hexToBytes(link);
     return NanoHelpers.byteToHex(
       Ed25519Blake2b.computeHash(accountBytes, previousBytes, representativeBytes, balanceBytes, linkBytes)
+    );
+  }
+
+  static String generateMessageHash(int accountType, String account, String message) {
+    final dummy_32 = "0000000000000000000000000000000000000000000000000000000000000000";
+    return NanoBlocks.computeStateHash(
+      accountType,
+      account,
+      dummy_32,
+      NanoAccounts.createAccount(
+        accountType,
+        NanoHelpers.byteToHex(Ed25519Blake2b.computeHashMessage(
+          NanoHelpers.stringToBytesUtf8((accountType == NanoAccountType.BANANO ? "bananomsg-" : "nanomsg-") + message)
+        )),
+      ),
+      BigInt.from(0),
+      dummy_32,
     );
   }
 }

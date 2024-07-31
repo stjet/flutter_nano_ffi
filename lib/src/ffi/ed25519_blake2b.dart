@@ -91,6 +91,23 @@ final void Function(Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint
       .lookup<NativeFunction<hash_func>>('dart_hash_state_block')
       .asFunction<BlockHash>();
 
+// C hash message function -void dart_hash_message(
+//  unsigned char *hash, size_t messagelen, unsigned char *message)
+typedef hash_message_func = Void Function(
+  Pointer<Uint8> hash,
+  Uint32 messagelen,
+  Pointer<Uint8> message,
+);
+typedef MessageHash = void Function(
+  Pointer<Uint8> hash,
+  int messagelen,
+  Pointer<Uint8> message,
+);
+final void Function(Pointer<Uint8>, int, Pointer<Uint8>)
+   hashMessageFunc = dyLib
+      .lookup<NativeFunction<hash_message_func>>('dart_hash_message')
+      .asFunction<MessageHash>();
+
 class Ed25519Blake2b {
   // Copy byte array to native heap
   static Pointer<Uint8> _bytesToPointer(Uint8List bytes) {
@@ -161,6 +178,16 @@ class Ed25519Blake2b {
       final Pointer<Uint8> linkP = _bytesToPointer(link);
       hashFunc(hashP, preambleP, accountP, previousP, repP, balanceP, linkP);
       calloc.free(preambleP); calloc.free(accountP); calloc.free(previousP); calloc.free(repP); calloc.free(balanceP); calloc.free(linkP);
+      return hashP.asTypedList(32);
+  }
+
+  static Uint8List computeHashMessage(
+    Uint8List message
+  ) {
+      final Pointer<Uint8> hashP = calloc<Uint8>(32);
+      final Pointer<Uint8> messageP = _bytesToPointer(message);
+      hashMessageFunc(hashP, message.lengthInBytes, messageP);
+      calloc.free(messageP);
       return hashP.asTypedList(32);
   }
 

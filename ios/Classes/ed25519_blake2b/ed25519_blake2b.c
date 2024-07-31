@@ -32,6 +32,16 @@ int dart_validate_sig(ed25519_signature sig, size_t mlen, unsigned char *m, ed25
   return valid;
 }
 
+void dart_hash_message(
+  unsigned char *hash, size_t messagelen, unsigned char *message)
+{
+  blake2b_state b2b;
+
+  blake2b_Init(&b2b, 32);
+  blake2b_Update(&b2b, message, messagelen);
+  blake2b_Final(&b2b, hash, 32);  
+}
+
 void dart_hash_state_block(
   unsigned char *hash, unsigned char *preamble, unsigned char *account, unsigned char *previous,
   unsigned char *rep, unsigned char *balance, unsigned char *link)
